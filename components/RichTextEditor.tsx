@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react';
-import Quill from 'quill';
+import dynamic from 'next/dynamic';
 import 'quill/dist/quill.snow.css';
+
+// Dynamically import Quill to avoid SSR issues
+const Quill = dynamic(() => import('quill'), {
+  ssr: false,
+  loading: () => <div className="h-[300px] bg-transparent" />
+});
 
 export type RichTextEditorHandle = {
   getContent: () => string;
@@ -14,17 +20,17 @@ type RichTextEditorProps = {
 
 const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(({ defaultValue }, ref) => {
   const editorRef = useRef<HTMLDivElement>(null);
-  const quillRef = useRef<Quill | null>(null);
-  const [isClient, setIsClient] = useState(false); // State to track if we are on the client side
+  const quillRef = useRef<any>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Check if we are in a browser environment
-    setIsClient(typeof window !== 'undefined');
+    setIsClient(true);
   }, []);
 
   useEffect(() => {
     if (isClient && editorRef.current && !quillRef.current) {
       // Initialize Quill only on the client side
+      const Quill = require('quill');
       quillRef.current = new Quill(editorRef.current, {
         theme: 'snow',
         modules: {
@@ -65,18 +71,13 @@ const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(({ 
   }));
 
   if (!isClient) {
-    // Return a placeholder or an empty div during SSR
-    return <div style={{ height: '300px', backgroundColor: 'transparent' }} />;
+    return <div className="h-[300px] bg-transparent" />;
   }
 
   return (
     <div
       ref={editorRef}
-      style={{
-        height: '300px',
-        backgroundColor: 'transparent',
-      }}
-      className="custom-quill"
+      className="h-[300px] bg-transparent"
     />
   );
 });
