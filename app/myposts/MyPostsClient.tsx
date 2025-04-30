@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@/lib/authStore";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
-import PostCard from "@/components/PostCard";
+import PostCard from "@/components/PostCardClient";
 
 interface PopulatedUser {
   login_name: string;

@@ -9,7 +9,7 @@ import { useAuthStore } from "@/lib/authStore";
 import { setLoading } from "@/lib/uiSlice";
 import { useRouter } from "next/navigation";
 import { AiOutlineSearch } from "react-icons/ai";
-const PostCard = dynamic(() => import("@/components/PostCard"), { ssr: false });
+import PostCard from "@/components/PostCardClient";
 
 export default function BlogPage() {
   const dispatch = useDispatch<AppDispatch>();

@@ -7,7 +7,7 @@ import api from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setSuccess, setError } from "@/lib/uiSlice";
 import { AppDispatch } from "@/lib/store";
-import PostCard from "@/components/PostCard";
+import PostCard from "@/components/PostCardClient";
 
 interface PopulatedUser {
   login_name: string;
