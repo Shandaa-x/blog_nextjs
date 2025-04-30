@@ -7,12 +7,19 @@ import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import TextStyle from "@tiptap/extension-text-style";
 import Heading from "@tiptap/extension-heading";
+import { useState, useEffect } from "react";
 
 export default function TiptapEditor({
   onChange,
 }: {
   onChange: (html: string) => void;
 }) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -28,9 +35,27 @@ export default function TiptapEditor({
     },
   });
 
-  if (!editor) {
+  if (!isMounted || !editor) {
     return null;
   }
+
+  const handleImageInsert = () => {
+    if (typeof window !== 'undefined') {
+      const url = window.prompt("Enter image URL:");
+      if (url) {
+        editor.chain().focus().setImage({ src: url }).run();
+      }
+    }
+  };
+
+  const handleLinkInsert = () => {
+    if (typeof window !== 'undefined') {
+      const url = window.prompt("Enter URL:");
+      if (url) {
+        editor.chain().focus().setLink({ href: url }).run();
+      }
+    }
+  };
 
   return (
     <div className="border rounded p-4 dark:bg-gray-700">
@@ -90,24 +115,14 @@ export default function TiptapEditor({
         </button>
 
         <button
-          onClick={() => {
-            const url = prompt("Enter image URL:");
-            if (url) {
-              editor.chain().focus().setImage({ src: url }).run();
-            }
-          }}
+          onClick={handleImageInsert}
           className="border rounded px-2"
         >
           🖼️ Image
         </button>
 
         <button
-          onClick={() => {
-            const url = prompt("Enter URL:");
-            if (url) {
-              editor.chain().focus().setLink({ href: url }).run();
-            }
-          }}
+          onClick={handleLinkInsert}
           className="border rounded px-2"
         >
           🔗 Link

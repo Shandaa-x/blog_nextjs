@@ -11,7 +11,7 @@ export default function Navbar() {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false); // New state to track client-side rendering
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -23,7 +23,6 @@ export default function Navbar() {
   ];
 
   useEffect(() => {
-    // This runs only on the client-side to prevent server/client mismatch
     setIsClient(true);
 
     if (user?.avatar) {
@@ -31,16 +30,20 @@ export default function Navbar() {
     }
 
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        setShowHeader(false);
-      } else {
-        setShowHeader(true);
+      if (typeof window !== 'undefined') {
+        if (window.scrollY > lastScrollY) {
+          setShowHeader(false);
+        } else {
+          setShowHeader(true);
+        }
+        setLastScrollY(window.scrollY);
       }
-      setLastScrollY(window.scrollY);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (typeof window !== 'undefined') {
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
   }, [lastScrollY, user]);
 
   const handleLogout = () => {
@@ -48,7 +51,6 @@ export default function Navbar() {
     router.push("/");
   };
 
-  // Return null or a loading state if we're still waiting for client-side data to load
   if (!isClient) {
     return null;
   }
