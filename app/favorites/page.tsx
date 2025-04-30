@@ -1,12 +1,10 @@
-// "use client";
+// app/Favorites/page.tsx
+import FavoritesClientWrapper from "./FavClientWrapper";
 
 export const metadata = {
-    title: 'Хадгалсан нийтлэлүүд',
-  };
-  
-  import FavoritesPageView from './FavoritesPage';
-  
-  export default function Favorites() {
-    return <FavoritesPageView />;
-  }
-  
+  title: "Хадгалсан",
+};
+
+export default function Favorites() {
+  return <FavoritesClientWrapper />;
+}

@@ -1,12 +1,10 @@
-// "use client";
+// app/Blog/page.tsx
+import BlogClientWrapper from "./BlogClientWrapper";
 
 export const metadata = {
-    title: 'Блог',
-  };
-  
-  import BlogPageView from './BlogPage';
-  
-  export default function BlogPage() {
-    return <BlogPageView />;
-  }
-  
+  title: "Блог",
+};
+
+export default function Blog() {
+  return <BlogClientWrapper />;
+}

@@ -1,13 +1,10 @@
-// /app/search/page.tsx
-"use client";
+// app/search/page.tsx
+import SearchClientWrapper from "./SearchClientWrapper";
 
-import { Suspense } from "react";
-import SearchPage from "./searchPage";
+export const metadata = {
+  title: "Хайлт",
+};
 
-export default function Page() {
-  return (
-    <Suspense fallback={<div className="text-center mt-10">Уншиж байна...</div>}>
-      <SearchPage />
-    </Suspense>
-  );
+export default function Search() {
+  return <SearchClientWrapper />;
 }

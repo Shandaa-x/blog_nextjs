@@ -1,12 +1,10 @@
-// "use client";
+// app/Edit/page.tsx
+import EditClientWrapper from "./EditClientWrapper";
 
 export const metadata = {
-    title: 'Нийтлэл үүсгэх',
-  };
-  
-  import EditPageView from './EditPage';
-  
-  export default function Edit() {
-    return <EditPageView />;
-  }
-  
+  title: "Блог засах",
+};
+
+export default function Edit() {
+  return <EditClientWrapper />;
+}
