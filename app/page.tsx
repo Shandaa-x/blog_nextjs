@@ -4,8 +4,8 @@ export const metadata = {
   title: 'Нүүр хуудас',
 };
 
-import HomePageView from './HomePage';
+import Home from './home';
 
 export default function HomePage() {
-  return <HomePageView />;
+  return <Home/> ;
 }
