@@ -3,11 +3,10 @@
 
 import dynamic from "next/dynamic";
 
-// dynamically import the actual page to disable SSR
-const CreatePageView = dynamic(() => import("./CreatePage"), {
+const CreateClientInner = dynamic(() => import("./CreateClientInner"), {
   ssr: false,
 });
 
 export default function CreateClientWrapper() {
-  return <CreatePageView />;
+  return <CreateClientInner />;
 }
