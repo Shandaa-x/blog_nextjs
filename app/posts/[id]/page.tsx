@@ -67,7 +67,7 @@ export default function PostDetailPage() {
     <div className="max-w-4xl mx-auto mt-10 p-8 bg-[#1F2937] rounded-3xl shadow-2xl text-white mb-10">
       {post.image && (
         <img
-          src={`http://localhost:5000${post.image}`}
+          src={`https://blog-back-end-9h38.onrender.com${post.image}`}
           alt={post.title}
           className="w-full object-cover rounded-2xl shadow-md mb-6"
         />
@@ -78,7 +78,7 @@ export default function PostDetailPage() {
       <div className="flex items-center gap-4 mb-6">
         {post.user?.avatar ? (
           <img
-            src={`http://localhost:5000/uploads/${post.user.avatar}`}
+            src={`https://blog-back-end-9h38.onrender.com/uploads/${post.user.avatar}`}
             alt={post.user.login_name}
             className="w-10 h-10 rounded-full object-cover"
           />

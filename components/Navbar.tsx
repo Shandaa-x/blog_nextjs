@@ -27,7 +27,7 @@ export default function Navbar() {
     setIsClient(true);
 
     if (user?.avatar) {
-      setAvatarUrl(`http://localhost:5000/uploads/${user.avatar}`);
+      setAvatarUrl(`https://blog-back-end-9h38.onrender.com/uploads/${user.avatar}`);
     }
 
     const handleScroll = () => {

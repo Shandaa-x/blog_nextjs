@@ -102,7 +102,7 @@ export default function PostCard({
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
               {post.user?.avatar ? (
                 <img
-                  src={`http://localhost:5000/uploads/${post.user.avatar}`}
+                  src={`https://blog-back-end-9h38.onrender.com/uploads/${post.user.avatar}`}
                   alt={post.user.login_name}
                   className="w-6 h-6 rounded-full object-cover"
                 />
@@ -153,7 +153,7 @@ export default function PostCard({
         {post.image && (
           <div className="w-full md:w-40 flex-shrink-0">
             <img
-              src={`http://localhost:5000${post.image}`}
+              src={`https://blog-back-end-9h38.onrender.com${post.image}`}
               alt="Post"
               className="w-full h-full object-cover rounded-md"
             />
