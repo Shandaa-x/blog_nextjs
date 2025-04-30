@@ -1,5 +1,5 @@
 // app/Favorites/page.tsx
-import FavoritesClientWrapper from "./FavClientWrapper";
+import FavoritesClientWrapper from "./FavoritesClientWrapper";
 
 export const metadata = {
   title: "Хадгалсан",
