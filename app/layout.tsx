@@ -1,6 +1,10 @@
 
 import "./globals.css";
-import Providers from "./provider";
+import dynamic from "next/dynamic";
+
+const Providers = dynamic(() => import("./provider"), {
+  ssr: false,
+});
 
 export const metadata = {
   title: "Blog",

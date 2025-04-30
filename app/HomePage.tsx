@@ -12,7 +12,7 @@ export default function HomePage() {
       router.push("/login");
     } else {
       router.push("/create");
-      console.log("User info:", user);
+      console.log("User infoooooooooo:", user);
     }
   };
 
