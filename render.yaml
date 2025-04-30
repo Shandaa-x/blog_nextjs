@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: blog_nextjs
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run dev
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://blog-back-end-9h38.onrender.com/api
