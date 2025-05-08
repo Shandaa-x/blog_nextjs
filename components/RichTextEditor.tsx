@@ -3,12 +3,60 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'quill/dist/quill.snow.css';
+import type Quill from 'quill';
+
+interface QuillDivElement extends HTMLDivElement {
+  quill?: Quill;
+}
 
 // Dynamically import Quill to avoid SSR issues
-const Quill = dynamic(() => import('quill'), {
-  ssr: false,
-  loading: () => <div className="h-[300px] bg-transparent" />
-});
+const QuillEditor = dynamic(
+  async () => {
+    const { default: Quill } = await import('quill');
+    return ({ forwardedRef, defaultValue }: { forwardedRef: React.RefObject<QuillDivElement>; defaultValue?: string }) => {
+      const [isClient, setIsClient] = useState(false);
+
+      useEffect(() => {
+        setIsClient(true);
+      }, []);
+
+      useEffect(() => {
+        if (isClient && forwardedRef.current && !forwardedRef.current.quill) {
+          const quill = new Quill(forwardedRef.current, {
+            theme: 'snow',
+            modules: {
+              toolbar: [
+                [{ header: [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['link', 'image'],
+                ['clean'],
+              ],
+            },
+            placeholder: 'Write something...',
+          });
+
+          forwardedRef.current.quill = quill;
+
+          const editor = forwardedRef.current.querySelector('.ql-editor') as HTMLDivElement;
+          if (editor) {
+            editor.style.color = 'white';
+            editor.style.caretColor = 'white';
+          }
+
+          if (defaultValue) {
+            quill.root.innerHTML = defaultValue;
+          }
+        }
+      }, [isClient, forwardedRef, defaultValue]);
+
+      return null;
+    };
+  },
+  {
+    ssr: false,
+  }
+);
 
 export type RichTextEditorHandle = {
   getContent: () => string;
@@ -19,52 +67,17 @@ type RichTextEditorProps = {
 };
 
 const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(({ defaultValue }, ref) => {
-  const editorRef = useRef<HTMLDivElement>(null);
-  const quillRef = useRef<any>(null);
+  const editorRef = useRef<QuillDivElement>(null);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (isClient && editorRef.current && !quillRef.current) {
-      // Initialize Quill only on the client side
-      const Quill = require('quill');
-      quillRef.current = new Quill(editorRef.current, {
-        theme: 'snow',
-        modules: {
-          toolbar: [
-            [{ header: [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['link', 'image'],
-            ['clean'],
-          ],
-        },
-        placeholder: 'Write something...',
-      });
-
-      const editor = editorRef.current.querySelector('.ql-editor') as HTMLDivElement;
-      if (editor) {
-        editor.style.color = 'white';
-        editor.style.caretColor = 'white'; 
-      }
-    }
-
-    if (quillRef.current && defaultValue) {
-      quillRef.current.root.innerHTML = defaultValue;
-    }
-
-    return () => {
-      quillRef.current = null;
-    };
-  }, [defaultValue, isClient]);
-
   useImperativeHandle(ref, () => ({
     getContent: () => {
-      if (quillRef.current) {
-        return quillRef.current.root.innerHTML;
+      if (editorRef.current?.quill) {
+        return editorRef.current.quill.root.innerHTML;
       }
       return '';
     },
@@ -75,10 +88,13 @@ const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(({ 
   }
 
   return (
-    <div
-      ref={editorRef}
-      className="h-[300px] bg-transparent"
-    />
+    <>
+      <div
+        ref={editorRef}
+        className="h-[300px] bg-transparent"
+      />
+      <QuillEditor forwardedRef={editorRef} defaultValue={defaultValue} />
+    </>
   );
 });
 
