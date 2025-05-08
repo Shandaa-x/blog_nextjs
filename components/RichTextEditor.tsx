@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react';
 import dynamic from 'next/dynamic';
-import 'quill/dist/quill.snow.css';
 import type Quill from 'quill';
 
 interface QuillDivElement extends HTMLDivElement {
@@ -13,6 +12,8 @@ interface QuillDivElement extends HTMLDivElement {
 const QuillEditor = dynamic(
   async () => {
     const { default: Quill } = await import('quill');
+    await import('quill/dist/quill.snow.css');
+    
     return ({ forwardedRef, defaultValue }: { forwardedRef: React.RefObject<QuillDivElement>; defaultValue?: string }) => {
       const [isClient, setIsClient] = useState(false);
 
@@ -55,6 +56,7 @@ const QuillEditor = dynamic(
   },
   {
     ssr: false,
+    loading: () => <div className="h-[300px] bg-transparent border border-gray-700 rounded-lg animate-pulse" />,
   }
 );
 
@@ -84,17 +86,17 @@ const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(({ 
   }));
 
   if (!isClient) {
-    return <div className="h-[300px] bg-transparent" />;
+    return <div className="h-[300px] bg-transparent border border-gray-700 rounded-lg animate-pulse" />;
   }
 
   return (
-    <>
+    <div className="relative">
       <div
         ref={editorRef}
         className="h-[300px] bg-transparent"
       />
       <QuillEditor forwardedRef={editorRef} defaultValue={defaultValue} />
-    </>
+    </div>
   );
 });
 
